@@ -1,13 +1,89 @@
 package com.example.Bancario.Bootcamp.demo;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-@SpringBootTest
+import javax.print.attribute.standard.Media;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+import com.example.Bancario.Bootcamp.demo.model.Customer;
+import com.example.Bancario.Bootcamp.demo.service.ICustomerService;
+
+import io.swagger.models.Response;
+import reactor.core.publisher.Mono;
+
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(classes = DemoApplicationTests.class)
 class DemoApplicationTests {
 
+	@Autowired
+	private WebTestClient client;
+	
+	@Autowired
+	private ICustomerService customerservice;
+	
+	
 	@Test
-	void contextLoads() {
+	void listarClientesTest() {
+		
+		client.get()
+		.uri("/client/listar")
+		.accept(MediaType.APPLICATION_JSON_UTF8)
+		.exchange()
+		.expectStatus().isOk()
+		.expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+		.expectBodyList(Customer.class)
+		.consumeWith(response->{
+		  List<Customer> customer=response.getResponseBody();
+		    customer.forEach(c->{
+		    	System.out.println(c);
+		    });
+		   Assertions.assertThat(customer.size()>0).isTrue();
+		});
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void verTest() {
+		
+		
+		  Customer customer=customerservice.findByNombre("richard").block(); 
+		  
+		  client.get()
+		  .uri("/client/listar/{id}",Collections.singletonMap("id", customer.getId()))
+		  .accept(MediaType.APPLICATION_JSON_UTF8) 
+		  .exchange()
+		  .expectStatus().isOk()
+		  .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+		  .expectBody(Customer.class)
+		  .consumeWith(res->{
+			  
+			  Customer c =res.getResponseBody();
+			  Assertions.assertThat(c.getId()).isNotEmpty();
+	//		  Assertions.assertThat(c)
+			  
+			  
+		  });
+		  
+		  
+		  /*.expectBody()
+		  .jsonPath("$.id").isNotEmpty()
+		  .jsonPath("$.firsname").isEqualTo("richard");*/
+		   
+		 	
 	}
 
 }

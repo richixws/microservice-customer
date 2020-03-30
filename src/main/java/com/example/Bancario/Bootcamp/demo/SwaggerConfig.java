@@ -16,7 +16,7 @@ import java.util.Set;
 @EnableSwagger2
 public class SwaggerConfig {
 	public static final Contact DEFAULT_CONTACT = new Contact("Richard Andrew Wong Solorzano",
-			"https://gitlab.com/richix/bootcamp2020.git", "rwongsol@everis.com");
+			"https://github.com/richixws/microservice-customer.git", "rwongsol@everis.com");
 	public static final ApiInfo DEFAULT_API_INFO = new ApiInfo("cliente microservicio",
 			"operaciones de CRUD del cliente", "1.0", "urn:tos", DEFAULT_CONTACT.getName(), "Apache 2.0",
 			"http://www.google.com.pe");

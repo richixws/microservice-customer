@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Bancario.Bootcamp.demo.model.Customer;
-import com.example.Bancario.Bootcamp.demo.service.CustomerService;
+import com.example.Bancario.Bootcamp.demo.service.ICustomerService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +27,7 @@ public class CustomerController {
 
 
 	@Autowired
-	private CustomerService customerservice;
+	private ICustomerService customerservice;
 	
 	@ApiOperation(value = "registrar cliente")
 	@PostMapping("/customer")

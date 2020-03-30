@@ -16,34 +16,33 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
 @Data
 @Document(collection = "cliente")
 
 public class Customer {
- 
+
 	@Id
 	private String id;
-	
+
 	private String firsname;
-	
-	private String LastName;
-	
+
+	private String lastname;
+
 	private String dni;
 
-//	private CustomerType customerType;
-	
-	
-	
+	@Valid
+	private CustomerType customerType;
 
-
-	
-
-	public String getFirsname() {
-		return firsname;
+	public Customer(String firsname, String lastname, String dni, @Valid CustomerType customerType) {
+		super();
+		this.firsname = firsname;
+		this.lastname = lastname;
+		this.dni = dni;
+		this.customerType = customerType;
 	}
-
 
 	public String getId() {
 		return id;
@@ -53,44 +52,37 @@ public class Customer {
 		this.id = id;
 	}
 
+	public String getFirsname() {
+		return firsname;
+	}
+
 	public void setFirsname(String firsname) {
 		this.firsname = firsname;
 	}
 
-
-	public String getLastName() {
-		return LastName;
+	public String getLastname() {
+		return lastname;
 	}
 
-
-	public void setLastName(String lastName) {
-		LastName = lastName;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
-
 
 	public String getDni() {
 		return dni;
 	}
 
-
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
 
+	public CustomerType getCustomerType() {
+		return customerType;
+	}
 
-//	public CustomerType getCustomerType() {
-//		return customerType;
-//	}
+	public void setCustomerType(CustomerType customerType) {
+		this.customerType = customerType;
+	}
 
-
-//	public void setCustomerType(CustomerType customerType) {
-//		this.customerType = customerType;
-//	}
-	
-	
-	
-	
-	
-	
-	
+   
 }

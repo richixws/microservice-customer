@@ -3,24 +3,32 @@ package com.example.Bancario.Bootcamp.demo.model;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+
+@ToString
+@Data
+@Getter
+@Setter
+@Document(collection = "tipocliente")
 public class CustomerType {
 
 	@Id
-	private int idCustomerType;
+	private String idCustomerType;
 	
 	@NotEmpty
 	private String descripcion;
 	
+
 	
-	public CustomerType(int idCustomerType, String descripcion) {
-		super();
-		this.idCustomerType = idCustomerType;
+	public CustomerType(@NotEmpty String descripcion) {
 		this.descripcion = descripcion;
 	}
-	
-	
-	
-	
-	
+
+		
 }

@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	private ICustomerRepository customerrepository;
@@ -47,6 +47,12 @@ public class CustomerServiceImpl implements CustomerService {
 	public Mono<Customer> findById(String id) {
 		// TODO Auto-generated method stub
 		return this.customerrepository.findById(id);
+	}
+
+	@Override
+	public Mono<Customer> findByNombre(String nombre) {
+	
+		return this.customerrepository.findByNombre(nombre);
 	}
 
 }

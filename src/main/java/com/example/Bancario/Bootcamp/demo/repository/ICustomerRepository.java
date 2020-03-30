@@ -12,7 +12,9 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface ICustomerRepository extends ReactiveMongoRepository<Customer, String> {
 
+	public Mono<Customer> findByNombre(String nombre);
 //	Flux<Customer> findByCustomer(Integer Customer);
 	
 	
 }
+ 
