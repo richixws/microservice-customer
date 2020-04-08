@@ -41,7 +41,7 @@ public class CustomerServiceTest {
 			
 				List<Customer> customer=res.getResponseBody();
 				  customer.forEach(c ->{
-					  System.out.println(c.getFirstName());
+					  System.out.println(c.getFullname());
 			
 				  });
 				  

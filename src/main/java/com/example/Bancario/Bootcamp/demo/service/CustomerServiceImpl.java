@@ -1,5 +1,7 @@
 package com.example.Bancario.Bootcamp.demo.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,21 @@ public class CustomerServiceImpl implements ICustomerService {
 	private ICustomerRepository customerrepository;
 
 	@Override
-	public Mono<Customer> save(Customer costumer) {
-		// TODO Auto-generated method stub
-		return this.customerrepository.save(costumer);
+	public Mono<Customer> save(Customer customer) {
+
+		if (customer.getJoinAt() == null) {
+			customer.setJoinAt(new Date());
+		} else {
+			customer.setJoinAt(customer.getJoinAt());
+		}
+
+		return this.customerrepository.save(customer);
 	}
 
 	@Override
-	public Mono<Customer> delete(String id) {
+	public Mono<Void> delete(Customer customer) {
 		// TODO Auto-generated method stub
-		return this.customerrepository.findById(id)
-				.flatMap(p -> this.customerrepository.deleteById(p.getId()).thenReturn(p));
+		return this.customerrepository.delete(customer);
 	}
 
 	@Override
@@ -50,9 +57,19 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	public Mono<Customer> findByNombre(String nombre) {
-	
-		return this.customerrepository.findByNombre(nombre);
+	public Mono<Customer> updateBankById(String bank, String id) {
+
+		return customerrepository.findById(id).flatMap(c -> {
+
+			if (c.getBank() == null) {
+				c.setBank(c.getBank());
+			} else {
+				c.setBank(bank);
+			}
+
+			return customerrepository.save(c);
+
+		});
 	}
 
 }

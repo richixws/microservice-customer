@@ -38,7 +38,7 @@ class DemoApplicationTests {
 	void listarClientesTest() {
 		
 		client.get()
-		.uri("/client/listar")
+		.uri("/customer/listar")
 		.accept(MediaType.APPLICATION_JSON_UTF8)
 		.exchange()
 		.expectStatus().isOk()
@@ -53,37 +53,6 @@ class DemoApplicationTests {
 		});
 	}
 	
-	/**
-	 * 
-	 */
-	@Test
-	public void verTest() {
-		
-		
-		  Customer customer=customerservice.findByNombre("richard").block(); 
-		  
-		  client.get()
-		  .uri("/client/listar/{id}",Collections.singletonMap("id", customer.getId()))
-		  .accept(MediaType.APPLICATION_JSON_UTF8) 
-		  .exchange()
-		  .expectStatus().isOk()
-		  .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-		  .expectBody(Customer.class)
-		  .consumeWith(res->{
-			  
-			  Customer c =res.getResponseBody();
-			  Assertions.assertThat(c.getId()).isNotEmpty();
-	//		  Assertions.assertThat(c)
-			  
-			  
-		  });
-		  
-		  
-		  /*.expectBody()
-		  .jsonPath("$.id").isNotEmpty()
-		  .jsonPath("$.firsname").isEqualTo("richard");*/
-		   
-		 	
-	}
+
 
 }

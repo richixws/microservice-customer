@@ -11,11 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@ToString
 @Data
-@Getter
-@Setter
-@Document(collection = "tipocliente")
 public class CustomerType {
 
 	@Id
@@ -23,12 +19,6 @@ public class CustomerType {
 	
 	@NotEmpty
 	private String descripcion;
-	
-
-	
-	public CustomerType(@NotEmpty String descripcion) {
-		this.descripcion = descripcion;
-	}
 
 		
 }

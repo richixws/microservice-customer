@@ -1,6 +1,11 @@
 package com.example.Bancario.Bootcamp.demo.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,51 +26,59 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/customer")
 @Api(value = "sistema gestion clientes")
 public class CustomerController {
 
-
 	@Autowired
-	private ICustomerService customerservice;
-	
-	@ApiOperation(value = "registrar cliente")
-	@PostMapping("/customer")
-	@ResponseStatus
-	private Mono<Customer> save(@RequestBody Customer customer){
+	private ICustomerService service;
+
+	//LISTAR TODOS LOS CLIENTES
+		@GetMapping("/findAll")
+		public Flux<Customer> findAll(){
+			return service.findAll();
+		}
 		
-		return this.customerservice.save(customer);
+		//LISTAR UN CLIENTE POR SU ID
+		@GetMapping("/findById/{id}")
+		public Mono<Customer> findById(@PathVariable("id") String id){
+			return service.findById(id);
+		}
 		
-	}
-	
-	@ApiOperation(value = "listado clientes")
-	@GetMapping("/listar")
-	private Flux<Customer> findAll(){
+		//CREAR UN CLIENTE
+		@PostMapping("/create")
+		public Mono<ResponseEntity<Customer>> create(@RequestBody Customer cus){
+			return service.save(cus).map(c -> ResponseEntity.created(URI.create("/clients".concat(c.getId())))
+					.contentType(MediaType.APPLICATION_JSON).body(c));
+		}
 		
-		return this.customerservice.findAll();
-	}
-	
-	@ApiOperation(value = "cliente buscado ")
-	@GetMapping("/listar/{id}")
-	private Mono<Customer> findById(@PathVariable String id){
-     
-	 Mono<Customer> cust=customerservice.findById(id)	;			
-     return cust;
-	
-	}
-	@ApiOperation(value = "cliente actualizado")
-	@PutMapping("/{id}")
-	private Mono<Customer> update(@PathVariable String id,  @RequestBody Customer customer){
+		//ACTUALIZAR UN CLIENTE
+		@PutMapping("/update/{id}")
+		public Mono<ResponseEntity<Customer>> update(@PathVariable("id") String id, @RequestBody Customer cus){
+			return service.update(id, cus)
+					.map(c -> ResponseEntity.created(URI.create("/clients".concat(c.getId())))
+							.contentType(MediaType.APPLICATION_JSON).body(c))
+					.defaultIfEmpty(ResponseEntity.notFound().build());
+		}
 		
-	  return customerservice.update(id, customer);
-	}
-	
-	@ApiOperation(value = "cliente eliminado")
-	@DeleteMapping("/{id}")
-	private Mono<Customer> delete(@PathVariable String id){
-	
-		return customerservice.delete(id);
+		//ELIMINAR UN CLIENTE
+		@DeleteMapping("/delete/{id}")
+		public Mono<ResponseEntity<Void>> delete(@PathVariable String id){
+			return service.findById(id)
+					.flatMap(c -> {
+						return service.delete(c)
+								.then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)));
+					}).defaultIfEmpty(new ResponseEntity<Void>(HttpStatus.NOT_FOUND));
+		}
 		
-	}
+		//ACTUALIZAR EL BANCO
+		@PutMapping("/updateBank/{id}")
+		public Mono<ResponseEntity<Customer>> updateBankById(@PathVariable("id") String id, @RequestBody Customer cus){
+			return service.updateBankById(cus.getBank(), id)
+					.map(c -> ResponseEntity.created(URI.create("/clients".concat(c.getId())))
+							.contentType(MediaType.APPLICATION_JSON).body(c))
+					.defaultIfEmpty(ResponseEntity.notFound().build());
+		}
+		
 	
 }

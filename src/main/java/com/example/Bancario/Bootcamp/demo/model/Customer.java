@@ -1,5 +1,6 @@
 package com.example.Bancario.Bootcamp.demo.model;
 
+import java.util.Date;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -7,6 +8,8 @@ import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,69 +23,26 @@ import lombok.ToString;
 @Setter
 @ToString
 @Data
-@Document(collection = "cliente")
+@Document(collection = "customers")
 
 public class Customer {
 
 	@Id
 	private String id;
 
-	private String firsname;
+	private String fullname;
 
-	private String lastname;
+	private String numDoc;
+	
+	private String address;
+	
+	private String bank;
+	 
+    private String type;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date joinAt;
 
-	private String dni;
 
-	@Valid
-	private CustomerType customerType;
-
-	public Customer(String firsname, String lastname, String dni, @Valid CustomerType customerType) {
-		super();
-		this.firsname = firsname;
-		this.lastname = lastname;
-		this.dni = dni;
-		this.customerType = customerType;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getFirsname() {
-		return firsname;
-	}
-
-	public void setFirsname(String firsname) {
-		this.firsname = firsname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public String getDni() {
-		return dni;
-	}
-
-	public void setDni(String dni) {
-		this.dni = dni;
-	}
-
-	public CustomerType getCustomerType() {
-		return customerType;
-	}
-
-	public void setCustomerType(CustomerType customerType) {
-		this.customerType = customerType;
-	}
-
-   
+	
 }
